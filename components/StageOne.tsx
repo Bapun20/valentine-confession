@@ -11,8 +11,15 @@ const StageOne: React.FC<StageOneProps> = ({ onNext }) => {
   const moveButton = () => {
     if (containerRef.current) {
       const container = containerRef.current.getBoundingClientRect();
-      const newX = Math.random() * (container.width - 100); // 100 is approx button width
-      const newY = Math.random() * (container.height - 50); // 50 is approx button height
+      const buttonWidth = 100;
+      const buttonHeight = 50;
+      
+      // Keep button within container bounds with padding
+      const maxX = Math.max(0, container.width - buttonWidth - 20);
+      const maxY = Math.max(0, container.height - buttonHeight - 20);
+      
+      const newX = Math.random() * maxX;
+      const newY = Math.random() * maxY;
       setNoButtonPos({ x: newX, y: newY });
     }
   };
@@ -20,7 +27,7 @@ const StageOne: React.FC<StageOneProps> = ({ onNext }) => {
   return (
     <div 
       ref={containerRef}
-      className="relative flex flex-col items-center justify-center h-[60vh] text-center space-y-8 animate-fade-in"
+      className="relative flex flex-col items-center justify-center h-[70vh] text-center space-y-8 animate-fade-in"
     >
       <h1 className="text-5xl md:text-6xl font-romantic text-val-red animate-pulse-slow">
         Do you love me? 💗
