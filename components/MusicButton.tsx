@@ -3,6 +3,7 @@ import { Music, VolumeX } from 'lucide-react';
 
 const MusicButton: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Set initial volume
@@ -18,15 +19,17 @@ const MusicButton: React.FC = () => {
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
+      setError(null);
     } else {
       audioRef.current.play()
         .then(() => {
           setIsPlaying(true);
+          setError(null);
         })
         .catch((error) => {
           console.error("Audio playback failed:", error);
-          // Sometimes browsers block audio if not triggered by direct user interaction.
-          // In this case, the click is the interaction, so it should work.
+          setError("Failed to play audio");
+          setIsPlaying(false);
         });
     }
   };
@@ -34,8 +37,8 @@ const MusicButton: React.FC = () => {
   return (
     <div className="absolute top-4 right-4 z-50">
       {/* Hidden Audio Element */}
-      <audio ref={audioRef} loop>
-       <source src="/songs/song.mp3" type="audio/mp3" />
+      <audio ref={audioRef} loop crossOrigin="anonymous">
+        <source src="/songs/song.mp3" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
 
@@ -54,6 +57,12 @@ const MusicButton: React.FC = () => {
           <VolumeX className="w-6 h-6" />
         )}
       </button>
+      
+      {error && (
+        <div className="absolute top-16 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+          {error}
+        </div>
+      )}
     </div>
   );
 };
