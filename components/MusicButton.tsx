@@ -6,6 +6,10 @@ const MusicButton: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  // Get the base path for both local and GitHub Pages
+  const basePath = import.meta.env.BASE_URL || '/';
+  const songUrl = `${basePath}songs/song.mp3`;
+
   // Set initial volume
   useEffect(() => {
     if (audioRef.current) {
@@ -38,7 +42,7 @@ const MusicButton: React.FC = () => {
     <div className="absolute top-4 right-4 z-50">
       {/* Hidden Audio Element */}
       <audio ref={audioRef} loop crossOrigin="anonymous">
-        <source src="/songs/song.mp3" type="audio/mp3" />
+        <source src={songUrl} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
 
